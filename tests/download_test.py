@@ -34,7 +34,8 @@ for tile_id in s2_tiles:
     features = query_features('Sentinel2', product_query)
     
     for feature in features:
-        download_feature(feature, 'E:/ssiec-co/DATASETS/', {'credentials': credentials})
         print(feature)
+        download_feature(feature, 'E:/ssiec-co/DATASETS/', {'credentials': credentials})
+        
     #     break
     # break

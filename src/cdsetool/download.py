@@ -7,6 +7,7 @@ all features in a result set.
 import os
 import random
 import tempfile
+import shutil
 import time
 from cdsetool._processing import _concurrent_process
 from cdsetool.credentials import Credentials
@@ -29,6 +30,7 @@ def download_feature(feature, path, options=None):
     # if os.path.exists(file):
     #     return feature.get("id")
 
+    path = os.path.join(path, filename.replace(".SAFE", ".zip"))
     with _get_monitor(options).status() as status:
         status.set_filename(filename)
 
@@ -40,8 +42,8 @@ def download_feature(feature, path, options=None):
 
         status.set_filesize(content_length)
 
-        fd, tmp = tempfile.mkstemp(dir=path)  # pylint: disable=invalid-name
-        with open(tmp, "wb") as file:
+        fd, temp_path = tempfile.mkstemp(dir=path)  # pylint: disable=invalid-name
+        with open(temp_path, "wb") as file:
             for chunk in response.iter_content(chunk_size=1024 * 1024 * 5):
                 if not chunk:
                     continue
@@ -50,7 +52,9 @@ def download_feature(feature, path, options=None):
                 status.add_progress(len(chunk))
 
         os.close(fd)
-        os.rename(tmp, os.path.join(path, filename.replace(".SAFE", ".zip")))
+        # os.rename(tmp, os.path.join(path, filename.replace(".SAFE", ".zip")))
+        # Download successful, rename the temporary file to its proper name
+        shutil.move(temp_path, path)
 
     return feature.get("id")
 
