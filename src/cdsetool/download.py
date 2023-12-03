@@ -30,8 +30,8 @@ def download_feature(feature, path, options=None):
     # if os.path.exists(file):
     #     return feature.get("id")
 
-    path = os.path.join(path, filename.replace(".SAFE", ".zip"))
-    if not os.path.exists(path):
+    fpath = os.path.join(path, filename.replace(".SAFE", ".zip"))
+    if not os.path.exists(fpath):
         with _get_monitor(options).status() as status:
             status.set_filename(filename)
 
@@ -54,7 +54,7 @@ def download_feature(feature, path, options=None):
 
             os.close(fd)
             # Download successful, rename the temporary file to its proper name
-            os.rename(temp_path, path)
+            os.rename(temp_path, fpath)
             # shutil.move(temp_path, path)
 
     return feature.get("id")
