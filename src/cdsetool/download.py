@@ -31,30 +31,31 @@ def download_feature(feature, path, options=None):
     #     return feature.get("id")
 
     path = os.path.join(path, filename.replace(".SAFE", ".zip"))
-    with _get_monitor(options).status() as status:
-        status.set_filename(filename)
+    if not os.path.exists(path):
+        with _get_monitor(options).status() as status:
+            status.set_filename(filename)
 
-        session = _get_credentials(options).get_session()
-        url = _follow_redirect(url, session)
-        response = _retry_backoff(url, session)
+            session = _get_credentials(options).get_session()
+            url = _follow_redirect(url, session)
+            response = _retry_backoff(url, session)
 
-        content_length = int(response.headers["Content-Length"])
+            content_length = int(response.headers["Content-Length"])
 
-        status.set_filesize(content_length)
+            status.set_filesize(content_length)
 
-        fd, temp_path = tempfile.mkstemp(dir=path)  # pylint: disable=invalid-name
-        with open(temp_path, "wb") as file:
-            for chunk in response.iter_content(chunk_size=1024 * 1024 * 5):
-                if not chunk:
-                    continue
+            fd, temp_path = tempfile.mkstemp(dir=path)  # pylint: disable=invalid-name
+            with open(temp_path, "wb") as file:
+                for chunk in response.iter_content(chunk_size=1024 * 1024 * 5):
+                    if not chunk:
+                        continue
 
-                file.write(chunk)
-                status.add_progress(len(chunk))
+                    file.write(chunk)
+                    status.add_progress(len(chunk))
 
-        os.close(fd)
-        # os.rename(tmp, os.path.join(path, filename.replace(".SAFE", ".zip")))
-        # Download successful, rename the temporary file to its proper name
-        shutil.move(temp_path, path)
+            os.close(fd)
+            # Download successful, rename the temporary file to its proper name
+            os.rename(temp_path, path)
+            # shutil.move(temp_path, path)
 
     return feature.get("id")
 
