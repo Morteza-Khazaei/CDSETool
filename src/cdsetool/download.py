@@ -36,12 +36,12 @@ def download_feature(feature, path, options=None):
     Returns the feature ID
     """
     options = options or {}
-    url = _finditem('url')
-    filename = _finditem('title')
-    size = _finditem('size')
+    url = _finditem(feature, 'url')
+    filename = _finditem(feature, 'title')
+    iid = _finditem(feature, 'id')
 
     if not url or not filename:
-        return feature.get("id")
+        return iid
 
     # if os.path.exists(file):
     #     return feature.get("id")
@@ -73,7 +73,7 @@ def download_feature(feature, path, options=None):
             os.rename(temp_path, fpath)
             # shutil.move(temp_path, path)
 
-    return feature.get("id")
+    return iid
 
 
 def download_features(features, path, options=None):
