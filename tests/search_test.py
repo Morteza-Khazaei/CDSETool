@@ -1,12 +1,14 @@
-import pandas as pd
-import requests
+product = {"type":"Feature","id":"c374fa4b-c700-4b83-84db-ea9ab47163f9","geometry":{"type":"Polygon","coordinates":[[[47.5010231005,39.6975094680204],[47.5497398895551,38.7099201955759],[48.8113480734462,38.7403699569925],[48.7803992080873,39.7290432642928],[47.5010231005,39.6975094680204]]]},"properties":{"collection":"SENTINEL-2","status":"ONLINE","license":{"licenseId":"unlicensed","hasToBeSigned":"never","grantedCountries":None,"grantedOrganizationCountries":None,"grantedFlags":None,"viewService":"public","signatureQuota":-1,"description":{"shortName":"No license"}},"productIdentifier":"/eodata/Sentinel-2/MSI/L1C/2023/07/07/S2A_MSIL1C_20230707T073621_N0509_R092_T39STD_20230707T082808.SAFE","parentIdentifier":None,"title":"S2A_MSIL1C_20230707T073621_N0509_R092_T39STD_20230707T082808.SAFE","description":"The Copernicus Sentinel-2 mission consists of two polar-orbiting satellites that are positioned in the same sun-synchronous orbit, with a phase difference of 180°. It aims to monitor changes in land surface conditions. The satellites have a wide swath width (290 km) and a high revisit time. Sentinel-2 is equipped with an optical instrument payload that samples 13 spectral bands: four bands at 10 m, six bands at 20 m and three bands at 60 m spatial resolution [https://dataspace.copernicus.eu/explore-data/data-collections/sentinel-data/sentinel-2].","organisationName":None,"startDate":"2023-07-07T07:36:21.024Z","completionDate":"2023-07-07T07:36:21.024Z","productType":"S2MSI1C","processingLevel":"S2MSI1C","platform":"S2A","instrument":"MSI","resolution":0,"sensorMode":"INS-NOBS","orbitNumber":41988,"quicklook":None,"thumbnail":"https://catalogue.dataspace.copernicus.eu/get-object?path=/Sentinel-2/MSI/L1C/2023/07/07/S2A_MSIL1C_20230707T073621_N0509_R092_T39STD_20230707T082808.SAFE/S2A_MSIL1C_20230707T073621_N0509_R092_T39STD_20230707T082808-ql.jpg","updated":"2023-07-07T11:44:51.758Z","published":"2023-07-07T11:44:37.771Z","snowCover":0,"cloudCover":0.0,"gmlgeometry":"<gml:Polygon srsName=\"EPSG:4326\"><gml:outerBoundaryIs><gml:LinearRing><gml:coordinates>47.5010231005,39.6975094680204 47.5497398895551,38.7099201955759 48.8113480734462,38.7403699569925 48.7803992080873,39.7290432642928 47.5010231005,39.6975094680204</gml:coordinates></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon>","centroid":{"type":"Point","coordinates":[48.1606507194398,39.2203657087897]},"orbitDirection":None,"timeliness":None,"relativeOrbitNumber":92,"processingBaseline":5.09,"missionTakeId":"GS2A_20230707T073621_041988_N05.09","services":{"download":{"url":"https://catalogue.dataspace.copernicus.eu/download/c374fa4b-c700-4b83-84db-ea9ab47163f9","mimeType":"application/octet-stream","size":831061458}},"links":[{"rel":"self","type":"application/json","title":"GeoJSON link for c374fa4b-c700-4b83-84db-ea9ab47163f9","href":"https://catalogue.dataspace.copernicus.eu/resto/collections/SENTINEL-2/c374fa4b-c700-4b83-84db-ea9ab47163f9.json"}]}}
 
 
 
-json = requests.get("http://catalogue.dataspace.copernicus.eu/resto/api/collections/Sentinel2/search.json?startDate=2021-07-01T00:00:00Z&completionDate=2021-07-31T23:59:59Z&sortParam=startDate&maxRecords=20").json()
-df = pd.DataFrame.from_dict(json['features'])
-print(df.head())
+def _finditem(obj, key):
+    if key in obj: return obj[key]
+    for k, v in obj.items():
+        if isinstance(v,dict):
+            item = _finditem(v, key)
+            if item is not None:
+                return item
 
-# iterating the columns
-for col in df.columns:
-    print(df['properties'].keys())
+val = _finditem(product, 'url')
+print(val)

@@ -7,11 +7,26 @@ all features in a result set.
 import os
 import random
 import tempfile
-import shutil
+import json
 import time
 from cdsetool._processing import _concurrent_process
 from cdsetool.credentials import Credentials
 from cdsetool.monitor import NoopMonitor
+
+
+
+def get_value_from_json(json_object, key):
+    try:
+        data = json.loads(json_object)
+        keys = key.split('.')
+        value = data
+
+        for k in keys:
+            value = value[k]
+
+        return value
+    except (json.JSONDecodeError, KeyError):
+        return None
 
 
 def download_feature(feature, path, options=None):
@@ -21,8 +36,9 @@ def download_feature(feature, path, options=None):
     Returns the feature ID
     """
     options = options or {}
-    url = _get_feature_url(feature)
-    filename = feature.get("properties").get("title")
+    url = _finditem('url')
+    filename = _finditem('title')
+    size = _finditem('size')
 
     if not url or not filename:
         return feature.get("id")
@@ -82,6 +98,15 @@ def download_features(features, path, options=None):
         yield feature
 
     options["monitor"].stop()
+
+
+def _finditem(obj, key):
+    if key in obj: return obj[key]
+    for k, v in obj.items():
+        if isinstance(v, dict):
+            item = _finditem(v, key)
+            if item is not None:
+                return item
 
 
 def _get_feature_url(feature):
