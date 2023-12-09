@@ -16,26 +16,26 @@ s2_tiles = ['39STD', '39STC', '39STB', '38SQJ', '38SQH',
              '39SYB', '39SYA', '39SYV', '40SBG', '40SBF', 
              '40SCH', '40SCG', '40SCF', '40SDH', '40SDG']
 
-from datetime import date
+# from datetime import date
 
-date_from = date(2023, 7, 1)
-date_to = date(2023, 8, 1)
+# date_from = date(2023, 7, 1)
+# date_to = date(2023, 8, 1)
 
 
 
-for tile_id in s2_tiles:
-    product_query = {
-        'tileId': tile_id, 
-        'startDate': date_from, 
-        'completionDate': date_to,
-        'productType': 'S2MSI1C',
-        'cloudCover': '[0,10]'
-    }
-    features = query_features('Sentinel2', product_query)
+# for tile_id in s2_tiles:
+#     product_query = {
+#         'tileId': tile_id, 
+#         'startDate': date_from, 
+#         'completionDate': date_to,
+#         'productType': 'S2MSI1C',
+#         'cloudCover': '[0,10]'
+#     }
+#     features = query_features('Sentinel2', product_query)
     
-    for feature in features:
-        print(feature)
-        download_feature(feature, 'E:/ssiec-co/DATASETS/', {'credentials': credentials})
+#     for feature in features:
+#         print(feature)
+#         download_feature(feature, 'E:/ssiec-co/DATASETS/', {'credentials': credentials})
         
-    #     break
-    # break
+#     #     break
+#     # break

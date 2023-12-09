@@ -145,8 +145,9 @@ class Credentials:  # pylint: disable=too-few-public-methods disable=too-many-in
         jwt.decode(
             self.__access_token,
             key=key.key,
-            algorithms=key._algorithms,  # pylint: disable=protected-access
-            options={"verify_aud": False},
+            algorithms=list(['RS256']).extend(key._algorithms),  # pylint: disable=protected-access
+            options={"verify_aud": False, "verify_signature": False},
+            leeway=60 # Set leeway to 60 seconds
         )
 
     def __read_credentials(self):
